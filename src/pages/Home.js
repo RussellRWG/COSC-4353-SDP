@@ -12,7 +12,9 @@ export default class Home extends React.Component {
 				<h1>Home Page</h1>
 				<h2>Use this page to test react router navigation</h2>
 				<button type="button" class="btn btn-primary">Login</button>
-				<button type="button" class="btn btn-primary">Registration</button>
+				<Link to="/registration">
+					<button type="button" class="btn btn-primary">Registration</button>
+				</Link>
 				<Link to="/profile">
 					<button type="button" class="btn btn-primary">Client Profile</button>
 				</Link>

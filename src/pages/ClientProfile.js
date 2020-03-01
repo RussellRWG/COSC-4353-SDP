@@ -18,9 +18,9 @@ export default class ClientProfile extends React.Component {
 						<Nav.Link>Fuel Qoute Form</Nav.Link>
 						<Nav.Link>Fuel Qoute History</Nav.Link>
 					</Nav>
-					<Navbar.Text>
+					<Nav.Link>
 						Logout
-					</Navbar.Text>
+					</Nav.Link>
 					</Navbar>
 
 				</div>
@@ -32,16 +32,16 @@ export default class ClientProfile extends React.Component {
 						<Form>
 							<Form.Group controlId="clientProfile">
 								<Form.Label>Name:</Form.Label>
-								<Form.Control type="name" placeholder="John Doe"/>
+								<Form.Control type="text" placeholder="John Doe"/>
 
 								<Form.Label>Address1:</Form.Label>
-								<Form.Control type="address1" placeholder="White House"/>
+								<Form.Control type="text" placeholder="White House"/>
 								
 								<Form.Label>Address2:</Form.Label>
-								<Form.Control type="address2" placeholder="Secret Bunker 123"/>
+								<Form.Control type="text" placeholder="Secret Bunker 123"/>
 								
 								<Form.Label>City:</Form.Label>
-								<Form.Control type="city" placeholder="Washington D.C."/>
+								<Form.Control type="text" placeholder="Washington D.C."/>
 
 								<Form.Label>State:</Form.Label>
 								<Form.Control as="select">
@@ -52,7 +52,7 @@ export default class ClientProfile extends React.Component {
 								</Form.Control>
 
 								<Form.Label>Zipcode:</Form.Label>
-								<Form.Control type="zipcode" placeholder="12345"/>
+								<Form.Control type="number" placeholder="12345"/>
 							</Form.Group>
 						</Form>
 					</div>
