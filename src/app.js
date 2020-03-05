@@ -22,14 +22,9 @@ const Main = () => {
 
 export default class App extends React.Component {
 	render() { return (
-		//<Provider store={store}>
 			<div className="App">
-					<Main/>
-					<div className='footer'>
-						<p>This website was made by Nekruz, Russel, and Andrew</p>
-					</div>
+				<Main/>
 			</div>
-		//</Provider>
 		);
 	}
 }

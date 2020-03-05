@@ -29,11 +29,11 @@ code {
 }
 
 .footer {
-  margin: auto;
+  /*position: absolute;*/
+  margin-top: -2em;
   width: 100%;
   height: 2em;
   background-color: #343a40;
-  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;

@@ -8,21 +8,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
-/*import {submitRegisterForm} from '../actions.js';
-import {registerProfile} from '../reducers.js';
-
-const mapStateToProps = state => {
-	return {
-		username: state.username
-	}
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		onSubmit: (event) => dispatch(submitRegisterForm(event.target.value))
-	}
-}*/
-
 class Registration extends React.Component {
 	constructor(props){
 		super(props);
@@ -64,7 +49,7 @@ class Registration extends React.Component {
 			});
 		}
 
-		if (this.state.password1 < 8){
+		if (this.state.password1.length < 8){
 			this.setState({
 				passwordFormError: 'Password must be at least 8 characters long'
 			});
@@ -101,9 +86,9 @@ class Registration extends React.Component {
 				<div className='focus'>
 					<h1>Registration</h1>
 					<Form>
-						<Form.Group controlId="clientProfile">
+						<Form.Group controlId="registration">
 							<Form.Label>Username</Form.Label>
-							<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="username"/>
+							<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
 
 							<Form.Label>Password</Form.Label>
 							<Form.Control name="password1" value={this.state.password1} onChange={this.onChange} type="password"/>
@@ -127,4 +112,4 @@ class Registration extends React.Component {
 	}
 }
 
-export default /*connect(mapStateToProps, mapDispatchToProps)*/(Registration);
+export default Registration;
