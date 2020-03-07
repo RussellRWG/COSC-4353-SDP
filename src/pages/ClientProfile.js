@@ -1,6 +1,7 @@
 import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
@@ -100,9 +101,13 @@ class ClientProfile extends React.Component {
 					<Navbar bg="dark" variant="dark" expand="lg">
 					<Navbar.Brand>Website Name</Navbar.Brand>
 					<Nav className="mr-auto">
-						<Nav.Link>Client Profile</Nav.Link>
-						<Nav.Link>Fuel Qoute Form</Nav.Link>
-						<Nav.Link>Fuel Qoute History</Nav.Link>
+						<Nav.Link><button type="button" class="btn btn-primary">Client Profile</button></Nav.Link>
+						<Nav.Link><Link to="/fuelform">
+            <button type="button" class="btn btn-primary">Fuel Quote Form</button>
+							</Link></Nav.Link>
+						<Nav.Link><Link to="/fuelhistory">
+            <button type="button" class="btn btn-primary">Fuel Quote History</button>
+							</Link></Nav.Link>
 					</Nav>
 					<Nav.Link>
 						Logout
@@ -122,10 +127,10 @@ class ClientProfile extends React.Component {
 
 								<Form.Label>Address1:</Form.Label>
 								<Form.Control name="address1" value={this.state.address1} type="text" onChange={this.onChange}/>
-								
+
 								<Form.Label>Address2:</Form.Label>
 								<Form.Control name="address2" value={this.state.address2} type="text" onChange={this.onChange}/>
-								
+
 								<Form.Label>City:</Form.Label>
 								<Form.Control name="city" type="text" value={this.state.city} onChange={this.onChange}/>
 
