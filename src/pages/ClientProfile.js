@@ -101,13 +101,9 @@ class ClientProfile extends React.Component {
 					<Navbar bg="dark" variant="dark" expand="lg">
 					<Navbar.Brand>Website Name</Navbar.Brand>
 					<Nav className="mr-auto">
-						<Nav.Link><button type="button" class="btn btn-primary">Client Profile</button></Nav.Link>
-						<Nav.Link><Link to="/fuelform">
-            <button type="button" class="btn btn-primary">Fuel Quote Form</button>
-							</Link></Nav.Link>
-						<Nav.Link><Link to="/fuelhistory">
-            <button type="button" class="btn btn-primary">Fuel Quote History</button>
-							</Link></Nav.Link>
+						<Nav.Link>Client Profile</Nav.Link>
+						<Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
+						<Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
 					</Nav>
 					<Nav.Link>
 						Logout
