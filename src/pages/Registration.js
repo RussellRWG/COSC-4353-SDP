@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
@@ -77,8 +78,9 @@ class Registration extends React.Component {
 						<Navbar.Brand>Website Name</Navbar.Brand>
 						<Nav className="mr-auto">
 						</Nav>
-						<Nav.Link>
-							Sign In
+						<Nav.Link><Link to="/login">
+            <button type="button" class="btn btn-primary">Sign In</button>
+							</Link>
 						</Nav.Link>
 					</Navbar>
 
