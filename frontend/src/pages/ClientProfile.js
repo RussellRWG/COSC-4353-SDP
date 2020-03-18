@@ -6,8 +6,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import Alert from 'react-bootstrap/Alert';
+
+import axios from 'axios';
 
 class ClientProfile extends React.Component {
 	constructor(props){
@@ -21,8 +22,32 @@ class ClientProfile extends React.Component {
 			zipcode: '',
 
 			formValid: false,
-			formError: ''
+			formError: '',
+
+			profileList: []
 		}
+	}
+
+	refresh = () => {
+		axios
+			.get(`http://localhost:8000/api/clientprofile/${1}/`)
+			.then(res => {
+				const list = res.data;
+				this.setState({
+					name: list.fullname,
+					address1: list.address1,
+					address2: list.address2,
+					city: list.city,
+					state: list.state,
+					zipcode: list.zipcode
+				});
+			})
+				
+				//this.setState({ profileList: res.data }))
+		/*this.setState({
+			name: this.profileList["fullname"],
+			address1: 'oogly',
+		})*/
 	}
 
 	onChange = (event) => {
@@ -34,6 +59,8 @@ class ClientProfile extends React.Component {
 	}
 
 	onUpdateProfile = (event) => {
+		this.refresh();
+
 		this.setState({
 			formValid: false,
 			formError: ''
