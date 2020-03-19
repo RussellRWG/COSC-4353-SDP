@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//import {Provider, connect} from 'react-redux';
+import {connect} from 'react-redux';
 import {Switch, Route} from 'react-router-dom';
-
-//import store from './store.js';
 
 import Home from './pages/Home';
 import Registration from './pages/Registration';
@@ -12,6 +10,9 @@ import ClientProfile from './pages/ClientProfile';
 import Login from './pages/Login';
 import FuelForm from './pages/FuelForm';
 import FuelHistory from './pages/FuelHistory';
+
+import * as actions from './store/actions/Auth';
+
 const Main = () => {
 	return (
 		<Switch>
@@ -25,11 +26,30 @@ const Main = () => {
 		)
 }
 
-export default class App extends React.Component {
+class App extends React.Component {
+
+	componentDidMount() {
+		this.props.onTryAutoSignup();
+	}
+
 	render() { return (
-			<div className="App">
+			<div className="App" {...this.props}>
 				<Main/>
 			</div>
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return {
+		isAuthenticated: state.token !== null
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onTryAutoSignup: () => dispatch(actions.authCheckState())
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -7,7 +7,9 @@ class ClientProfile(models.Model):
     
     fullname = models.CharField(max_length=50)
     address1 = models.CharField(max_length=100)
-    address2 = models.CharField(max_length=100)
+    address2 = models.CharField(max_length=100, blank=True, default='')
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zipcode = models.CharField(max_length=9)
+
+    newprofile = models.BooleanField(default=True)

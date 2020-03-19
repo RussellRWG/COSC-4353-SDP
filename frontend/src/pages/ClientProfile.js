@@ -23,9 +23,9 @@ class ClientProfile extends React.Component {
 
 			formValid: false,
 			formError: '',
-
-			profileList: []
 		}
+
+		this.refresh();
 	}
 
 	refresh = () => {
@@ -59,7 +59,7 @@ class ClientProfile extends React.Component {
 	}
 
 	onUpdateProfile = (event) => {
-		this.refresh();
+		//this.refresh();
 
 		this.setState({
 			formValid: false,
