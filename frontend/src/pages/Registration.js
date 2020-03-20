@@ -1,13 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {Link} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+
+import {connect} from 'react-redux';
+import * as actions from '../store/actions/Auth';
 
 class Registration extends React.Component {
 	constructor(props){
@@ -36,7 +37,8 @@ class Registration extends React.Component {
 			usernameValid: false,
 			passwordValid: false,
 			usernameFormError: '',
-			passwordFormError: ''
+			passwordFormError: '',
+			confirm: false
 		});
 
 		if (this.state.username.length < 3){
@@ -65,6 +67,15 @@ class Registration extends React.Component {
 				passwordValid: true
 			});
 		}
+
+		if (this.state.usernameFormError === '' && this.state.passwordFormError === '') {
+			this.props.onAuth(this.state.username, this.state.password1, this.state.password2, this.state.confirm);
+			//this.props.history.push('/login');
+		}
+	}
+
+	validate() {
+
 	}
 
 	render() {
@@ -114,4 +125,17 @@ class Registration extends React.Component {
 	}
 }
 
-export default Registration;
+const mapStateToProps = (state) => {
+	return {
+		loading: state.loading,
+		error: state.error
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onAuth: (username, password1, password2) => dispatch(actions.authRegistration(username, password1, password2))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

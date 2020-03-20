@@ -14,6 +14,7 @@ class ClientProfile extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			username: '',
 			name: '',
 			address1: '',
 			address2: '',
@@ -34,6 +35,7 @@ class ClientProfile extends React.Component {
 			.then(res => {
 				const list = res.data;
 				this.setState({
+					username : list.username,
 					name: list.fullname,
 					address1: list.address1,
 					address2: list.address2,
@@ -140,7 +142,7 @@ class ClientProfile extends React.Component {
 				</div>
 				<div className = "focus">
 					<div id = "title">
-						<h1>John Doe's Profile</h1>
+						<h1>{this.state.username}'s Profile</h1>
 					</div>
 					<div>
 						<Form>

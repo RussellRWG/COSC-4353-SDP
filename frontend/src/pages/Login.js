@@ -1,6 +1,6 @@
 import React from 'react';
-
 import {Link} from 'react-router-dom';
+
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
@@ -45,6 +45,11 @@ class Login extends React.Component {
 				formError: 'Password is invalid',
 			});
 		}
+
+		if (this.state.formError === '') {
+			this.props.onAuth(this.state.username, this.state.password);
+			//this.props.history.push('/profile');
+		}
 	}
 
     render(){
@@ -58,7 +63,7 @@ class Login extends React.Component {
 						<Nav className="mr-auto"></Nav>
 						<Nav.Link>
 							<Link to="/">
-        						<button type="button" class="btn btn-primary">Home</button>
+        						<button type="button" className="btn btn-primary">Home</button>
 							</Link>
 						</Nav.Link>
 					</Navbar>
@@ -74,10 +79,11 @@ class Login extends React.Component {
 							<Form.Control name="password" value={this.state.password} onChange={this.onChange} type="password"/>
 						</Form.Group>
 					</Form>
-				    <button type="button" class="btn btn-primary" onClick={this.onSubmit}>Submit</button>
-				  	<Link to="/Registration">
-				      <button type="button" class="btn btn-primary">Create an Account</button>
-			      	</Link>
+					<div>
+					    <button type="button" class="btn btn-primary" onClick={this.onSubmit}>Submit</button>
+					    <p>or <Link to="/Registration">Register</Link></p>
+				      	
+				    </div>
 			      	{formAlert !== '' &&
 						<Alert variant='danger'>{formAlert}</Alert>
 					}
