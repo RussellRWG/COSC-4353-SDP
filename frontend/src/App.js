@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import {connect} from 'react-redux';
-import {Switch, Route} from 'react-router-dom';
+import {/*Switch,*/ Route} from 'react-router-dom';
 
 import Home from './pages/Home';
 import Registration from './pages/Registration';
@@ -13,16 +12,18 @@ import FuelHistory from './pages/FuelHistory';
 
 import * as actions from './store/actions/Auth';
 
+const Hoc = props => props.children;
+
 const Main = () => {
 	return (
-		<Switch>
+		<Hoc>
 			<Route exact path='/' component={Home}></Route>
 			<Route exact path='/registration' component={Registration}></Route>
 			<Route exact path='/profile' component={ClientProfile}></Route>
 			<Route exact path='/login' component={Login}></Route>
 			<Route exact path='/fuelform' component={FuelForm}></Route>
 			<Route exact path='/fuelhistory' component={FuelHistory}></Route>
-		</Switch>
+		</Hoc>
 		)
 }
 
@@ -33,8 +34,8 @@ class App extends React.Component {
 	}
 
 	render() { return (
-			<div className="App" {...this.props}>
-				<Main/>
+			<div className="App" >
+				<Main{...this.props}/>
 			</div>
 		);
 	}
@@ -48,7 +49,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onTryAutoSignup: () => dispatch(actions.authCheckState())
+		onTryAutoSignup: () => dispatch(actions.authCheckState()),
 	}
 }
 

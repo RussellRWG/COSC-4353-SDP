@@ -1,14 +1,14 @@
 import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Link} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
 import axios from 'axios';
+
+import {connect} from 'react-redux';
 
 class ClientProfile extends React.Component {
 	constructor(props){
@@ -22,14 +22,22 @@ class ClientProfile extends React.Component {
 			state: '',
 			zipcode: '',
 
-			formValid: false,
 			formError: '',
 		}
-
-		this.refresh();
 	}
 
-	refresh = () => {
+	componentDidMount = () => {
+		if (!this.props.token){
+			this.props.history.push('/login');
+		}
+
+		axios.defaults.headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Token ${this.props.token}`
+		};
+		console.log('Token:', this.props.token);
+		console.log(axios.defaults.headers['Authorization']);
+
 		axios
 			.get(`http://localhost:8000/api/clientprofile/${1}/`)
 			.then(res => {
@@ -44,13 +52,32 @@ class ClientProfile extends React.Component {
 					zipcode: list.zipcode
 				});
 			})
-				
-				//this.setState({ profileList: res.data }))
-		/*this.setState({
-			name: this.profileList["fullname"],
-			address1: 'oogly',
-		})*/
 	}
+
+	/*refresh = () => {
+		axios.defaults.headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Token ${this.props.token}`
+		};
+		console.log('Token:', this.props.token);
+		console.log(axios.defaults.headers['Authorization']);
+		//axios.defaults.headers.common['Authorization'] = 'Token {this.props.token}';
+
+		axios
+			.get(`http://localhost:8000/api/clientprofile/${1}/`)
+			.then(res => {
+				const list = res.data;
+				this.setState({
+					username : list.username,
+					name: list.fullname,
+					address1: list.address1,
+					address2: list.address2,
+					city: list.city,
+					state: list.state,
+					zipcode: list.zipcode
+				});
+			})
+	}*/
 
 	onChange = (event) => {
 		const name = event.target.name;
@@ -61,10 +88,7 @@ class ClientProfile extends React.Component {
 	}
 
 	onUpdateProfile = (event) => {
-		//this.refresh();
-
 		this.setState({
-			formValid: false,
 			formError: ''
 		});
 
@@ -109,14 +133,9 @@ class ClientProfile extends React.Component {
 				formError: 'You must select a state'
 			});
 		}
-		else if (this.state.zipcode.length != 5 && this.state.zipcode.length != 9){
+		else if (this.state.zipcode.length !== 5 && this.state.zipcode.length !== 9){
 			this.setState({
 				formError: 'Zipcode must be 5 or 9 characters long'
-			});
-		}
-		else {
-			this.setState({
-				formValid: true
 			});
 		}
 	}
@@ -140,6 +159,7 @@ class ClientProfile extends React.Component {
 					</Navbar>
 
 				</div>
+				<div className = "outerfocus">
 				<div className = "focus">
 					<div id = "title">
 						<h1>{this.state.username}'s Profile</h1>
@@ -219,15 +239,22 @@ class ClientProfile extends React.Component {
 						</Form>
 					</div>
 					<div>
-						<button type="button" class="btn btn-primary" onClick={this.onUpdateProfile}>Update Profile</button>
+						<button type="button" className="btn btn-primary" onClick={this.onUpdateProfile}>Update Profile</button>
 						{formAlert !== '' &&
 							<Alert variant='danger'>{formAlert}</Alert>
 						}
 					</div>
+				</div>
 				</div>
 			</div>
 		);
 	}
 }
 
-export default ClientProfile;
+const mapStateToProps = state => {
+	return {
+		token: state.token
+	};
+};
+
+export default connect(mapStateToProps)(ClientProfile);

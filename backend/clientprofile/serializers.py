@@ -4,5 +4,5 @@ from .models import ClientProfile
 class ClientProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientProfile
-        fields = ('id', 'username', 'password', 'fullname', 'address1', 'address2', 'city', 'state', 'zipcode')
+        fields = ('id', 'username', 'fullname', 'address1', 'address2', 'city', 'state', 'zipcode')
 

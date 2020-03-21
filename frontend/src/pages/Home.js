@@ -3,11 +3,11 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
 
 export default class Home extends React.Component {
 	render() {
 		return (
+			<div className="outerfocus">
 			<div className="focus">
 				<h1>Home Page</h1>
 				<h2>Use this page to test react router navigation</h2>
@@ -26,6 +26,7 @@ export default class Home extends React.Component {
 				<Link to="/fuelhistory">
 				<button type="button" class="btn btn-primary">Fuel Qoute History</button>
 				</Link>
+			</div>
 			</div>
 		);
 	}

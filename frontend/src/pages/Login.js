@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
 import {connect} from 'react-redux';
@@ -48,12 +47,18 @@ class Login extends React.Component {
 
 		if (this.state.formError === '') {
 			this.props.onAuth(this.state.username, this.state.password);
-			//this.props.history.push('/profile');
+
+			if (!this.props.error){
+				this.props.history.push('/profile');
+			}
 		}
 	}
 
     render(){
-    	const formAlert = this.state.formError;
+    	let formAlert = this.state.formError;
+    	if (this.props.error){
+    		formAlert = this.props.error.message;
+    	}
 
         return(
             <div className="login">
@@ -69,25 +74,27 @@ class Login extends React.Component {
 					</Navbar>
                 </div>
 
-                <div className='focus'>
-					<h1>Sign In</h1>
-					<Form>
-						<Form.Group controlId="login">
-							<Form.Label>Username</Form.Label>
-							<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
-							<Form.Label>Password</Form.Label>
-							<Form.Control name="password" value={this.state.password} onChange={this.onChange} type="password"/>
-						</Form.Group>
-					</Form>
-					<div>
-					    <button type="button" class="btn btn-primary" onClick={this.onSubmit}>Submit</button>
-					    <p>or <Link to="/Registration">Register</Link></p>
-				      	
-				    </div>
-			      	{formAlert !== '' &&
-						<Alert variant='danger'>{formAlert}</Alert>
-					}
-            	</div>
+                <div className='outerfocus'>
+	                <div className='focus'>
+						<h1>Sign In</h1>
+						<Form>
+							<Form.Group controlId="login">
+								<Form.Label>Username</Form.Label>
+								<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
+								<Form.Label>Password</Form.Label>
+								<Form.Control name="password" value={this.state.password} onChange={this.onChange} type="password"/>
+							</Form.Group>
+						</Form>
+						<div>
+						    <button type="button" className="btn btn-primary" onClick={this.onSubmit}>Submit</button>
+						    <p>or <Link to="/Registration">Register</Link></p>
+					      	
+					    </div>
+				      	{formAlert !== '' &&
+							<Alert variant='danger'>{formAlert}</Alert>
+						}
+	            	</div>
+				</div>
             </div>
         );
     }
