@@ -19,7 +19,7 @@ const authSuccess = (state, action) => {
 		token: action.token,
 		error: null,
 		loading: false
-	})
+	});
 }
 
 const authFail = (state, action) => {

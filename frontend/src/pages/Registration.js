@@ -69,7 +69,6 @@ class Registration extends React.Component {
 
 		if (this.state.usernameFormError === '' && this.state.passwordFormError === '') {
 			this.props.onAuth(this.state.username, this.state.password1, this.state.password2, this.state.confirm);
-			//this.props.history.push('/login');
 		}
 	}
 
@@ -80,6 +79,11 @@ class Registration extends React.Component {
 	render() {
 		const usernameAlert = this.state.usernameFormError;
 		const passwordAlert = this.state.passwordFormError;
+
+		if (this.props.token){
+			this.props.logout();
+			this.props.history.push('/login');
+		}
 
 		return (
 			<div className="reigstration">
@@ -126,6 +130,7 @@ class Registration extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
+		token: state.token,
 		loading: state.loading,
 		error: state.error
 	}
@@ -133,7 +138,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onAuth: (username, password1, password2) => dispatch(actions.authRegistration(username, password1, password2))
+		onAuth: (username, password1, password2) => dispatch(actions.authRegistration(username, password1, password2)),
+		logout: () => dispatch(actions.logout()),
 	}
 }
 

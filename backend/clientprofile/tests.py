@@ -1,14 +1,17 @@
 from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
+from django.contrib.auth.models import User
 from .models import ClientProfile
 
 # Create your tests here.
 
 # python manage.py test clientprofile
 class BasicTest(TestCase):
-    def test_fields(self):
-        profile = ClientProfile()
+    def setup(self):
+        user = User.objects.create_user(username='bobby', password='1X<ISRUkw+tuK')
+        
+        profile = ClientProfile.objects.create(user=user)
         profile.username = "Bobby"
         profile.fullname = "Billy Bob"
         profile.address1 = "123 Street"
@@ -16,14 +19,16 @@ class BasicTest(TestCase):
         profile.city = "Houston"
         profile.state = "TX"
         profile.zipcode = "77777"
-        profile.newprofile = False
+        profile.validated = True
         profile.save()
 
         record = ClientProfile.objects.get(pk=1)
         self.assertEqual(record, profile)
 
     def test_validate_profile(self):
-        profile = ClientProfile()
+        user = User.objects.create_user(username='bobby', password='1X<ISRUkw+tuK')
+        
+        profile = ClientProfile.objects.create(user=user)
         profile.username = "Bobby"
         profile.fullname = "Billy Bob"
         profile.address1 = "123 Street"
@@ -31,20 +36,25 @@ class BasicTest(TestCase):
         profile.city = "Houston"
         profile.state = "TX"
         profile.zipcode = "77777"
-        profile.newprofile = False
+        profile.validated = True
         profile.save()
+        
+        errors = {}
 
         #Test Good Case
-        self.assertEqual(profile.validate_profile(), True)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, True)
 
         #Test Fullname
         profile.fullname = "123456789012345678901234567890123456789012345678901"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.fullname = ""
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.fullname = "Billy Bob"
         profile.save()
@@ -52,11 +62,13 @@ class BasicTest(TestCase):
         #Test Address1
         profile.address1 = "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.address1 = ""
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.address1 = "123 Street"
         profile.save()
@@ -65,7 +77,8 @@ class BasicTest(TestCase):
 
         profile.address2 = "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.address2 = ""
         profile.save()
@@ -73,11 +86,13 @@ class BasicTest(TestCase):
         #Test City
         profile.city = "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.city = ""
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.city = "Houston"
         profile.save()
@@ -85,27 +100,37 @@ class BasicTest(TestCase):
         #Test State
         profile.state = "AA"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.state = "TX"
         profile.save()
 
         #Test Zip Codes
+        profile.zipcode = ""
+        profile.save()
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
+        
         profile.zipcode = "123456789"
         profile.save()
-        self.assertEqual(profile.validate_profile(), True)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, True)
 
         profile.zipcode = "123"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.zipcode = "123456789101112"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
 
         profile.zipcode = "12345678"
         profile.save()
-        self.assertEqual(profile.validate_profile(), False)
+        profile.validate_profile()
+        self.assertEqual(profile.validated, False)
         
 
         

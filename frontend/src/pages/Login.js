@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 
 import {connect} from 'react-redux';
 import * as actions from '../store/actions/Auth';
@@ -44,14 +45,13 @@ class Login extends React.Component {
 				formError: 'Password is invalid',
 			});
 		}
-
-		if (this.state.formError === '') {
+		else if (this.state.formError === '') {
 			this.props.onAuth(this.state.username, this.state.password);
-
-			if (!this.props.error){
-				this.props.history.push('/profile');
-			}
 		}
+	}
+
+	validateFields() {
+
 	}
 
     render(){
@@ -60,7 +60,12 @@ class Login extends React.Component {
     		formAlert = this.props.error.message;
     	}
 
+		if (this.props.token){
+			this.props.history.push('/profile');
+		}
+
         return(
+
             <div className="login">
                 <div>
 	                <Navbar bg="dark" variant="dark" expand="lg">
@@ -77,24 +82,30 @@ class Login extends React.Component {
                 <div className='outerfocus'>
 	                <div className='focus'>
 						<h1>Sign In</h1>
-						<Form>
-							<Form.Group controlId="login">
-								<Form.Label>Username</Form.Label>
-								<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
-								<Form.Label>Password</Form.Label>
-								<Form.Control name="password" value={this.state.password} onChange={this.onChange} type="password"/>
-							</Form.Group>
-						</Form>
-						<div>
-						    <button type="button" className="btn btn-primary" onClick={this.onSubmit}>Submit</button>
-						    <p>or <Link to="/Registration">Register</Link></p>
-					      	
-					    </div>
-				      	{formAlert !== '' &&
-							<Alert variant='danger'>{formAlert}</Alert>
-						}
-	            	</div>
-				</div>
+						{this.props.loading ?
+							<Spinner animation="border" role="status"><span className="sr-only">Loading...</span></Spinner>
+							:
+							<div>
+								<Form>
+									<Form.Group controlId="login">
+										<Form.Label>Username</Form.Label>
+										<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
+										<Form.Label>Password</Form.Label>
+										<Form.Control name="password" value={this.state.password} onChange={this.onChange} type="password"/>
+									</Form.Group>
+								</Form>
+								<div>
+								    <button type="button" className="btn btn-primary" onClick={this.onSubmit}>Submit</button>
+								    <p>or <Link to="/Registration">Register</Link></p>
+							      	
+							    </div>
+						      	{formAlert !== '' &&
+									<Alert variant='danger'>{formAlert}</Alert>
+								}
+							</div>
+	            		}
+					</div>
+            	</div>
             </div>
         );
     }
@@ -102,6 +113,7 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
+		token: state.token,
 		loading: state.loading,
 		error: state.error
 	}

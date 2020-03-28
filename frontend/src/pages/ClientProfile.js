@@ -9,21 +9,41 @@ import Alert from 'react-bootstrap/Alert';
 import axios from 'axios';
 
 import {connect} from 'react-redux';
+import * as actions from '../store/actions/Auth';
 
 class ClientProfile extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			username: '',
-			name: '',
+			fullname: '',
 			address1: '',
 			address2: '',
 			city: '',
 			state: '',
 			zipcode: '',
 
-			formError: '',
+			formError: {
+				fullname : '',
+				address1 : '',
+				address2 : '',
+				city : '',
+				state : '',
+				zipcode : '',
+				},
 		}
+	}
+
+	clearFormErrors(){
+		this.setState({
+			formError: {
+				fullname : '',
+				address1 : '',
+				address2 : '',
+				city : '',
+				state : '',
+				zipcode : '',
+				},
+		});
 	}
 
 	componentDidMount = () => {
@@ -35,16 +55,17 @@ class ClientProfile extends React.Component {
 			'Content-Type': 'application/json',
 			Authorization: `Token ${this.props.token}`
 		};
-		console.log('Token:', this.props.token);
-		console.log(axios.defaults.headers['Authorization']);
+
+		//console.log('Token:', this.props.token);
 
 		axios
-			.get(`http://localhost:8000/api/clientprofile/${1}/`)
+			.get(`http://localhost:8000/api/clientprofile`)
 			.then(res => {
-				const list = res.data;
+				const list = res.data[0];
+				//console.log(list)
 				this.setState({
-					username : list.username,
-					name: list.fullname,
+					//username : list.username,
+					fullname: list.fullname,
 					address1: list.address1,
 					address2: list.address2,
 					city: list.city,
@@ -53,31 +74,6 @@ class ClientProfile extends React.Component {
 				});
 			})
 	}
-
-	/*refresh = () => {
-		axios.defaults.headers = {
-			'Content-Type': 'application/json',
-			Authorization: `Token ${this.props.token}`
-		};
-		console.log('Token:', this.props.token);
-		console.log(axios.defaults.headers['Authorization']);
-		//axios.defaults.headers.common['Authorization'] = 'Token {this.props.token}';
-
-		axios
-			.get(`http://localhost:8000/api/clientprofile/${1}/`)
-			.then(res => {
-				const list = res.data;
-				this.setState({
-					username : list.username,
-					name: list.fullname,
-					address1: list.address1,
-					address2: list.address2,
-					city: list.city,
-					state: list.state,
-					zipcode: list.zipcode
-				});
-			})
-	}*/
 
 	onChange = (event) => {
 		const name = event.target.name;
@@ -88,60 +84,103 @@ class ClientProfile extends React.Component {
 	}
 
 	onUpdateProfile = (event) => {
-		this.setState({
-			formError: ''
-		});
+		this.clearFormErrors()
 
-		if (this.state.name.length > 50){
+		/*if (this.state.fullname.length > 50){
 			this.setState({
-				formError: 'Name must be 50 characters or less'
+				formError: {'fullname':'Name must be 50 characters or less'}
 			});
 		}
-		else if (this.state.name.length < 1){
+		else if (this.state.fullname.length < 1){
 			this.setState({
-				formError: 'Name is required'
+				formError: {'fullname':'Name is required'}
 			});
 		}
 		else if (this.state.address1.length > 100){
 			this.setState({
-				formError: 'Address 1 must be 100 characters or less'
+				formError: {'address1':'Address 1 must be 100 characters or less'}
 			});
 		}
 		else  if (this.state.address1.length < 1){
 			this.setState({
-				formError: 'Address 1 is required'
+				formError: {'address1':'Address 1 is required'}
 			});
 
 		}
 		else if (this.state.address2.length > 100){
 			this.setState({
-				formError: 'Address 2 must be 100 characters or less'
+				formError: {'address2':'Address 2 must be 100 characters or less'}
 			});
 		}
 		else if (this.state.city.length > 100){
 			this.setState({
-				formError: 'City must be 100 characters or less'
+				formError: {'city':'City must be 100 characters or less'}
 			});
 		}
 		else if (this.state.city.length < 1){
 			this.setState({
-				formError: 'City is required'
+				formError: {'city':'City is required'}
 			});
 		}
 		else if (this.state.state === ''){
 			this.setState({
-				formError: 'You must select a state'
+				formError: {'state':'You must select a state'}
+			});
+		}
+		else if (this.state.zipcode.length < 1){
+			this.setState({
+				formError: {'zipcode':'Zipcode is required'}
 			});
 		}
 		else if (this.state.zipcode.length !== 5 && this.state.zipcode.length !== 9){
 			this.setState({
-				formError: 'Zipcode must be 5 or 9 characters long'
+				formError: {'zipcode':'Zipcode must be 5 or 9 characters long'}
 			});
 		}
+		else*/ //{
+			axios.put(`http://localhost:8000/api/clientprofile/`, JSON.stringify({
+				fullname: this.fullname,
+				address1: this.address1,
+				address2: this.address2,
+				city: this.city,
+				state: this.state,
+				zipcode: this.zipcode
+			})).
+			then (res => {
+				console.log('Response:', res);
+				const data = res.data;
+				this.setState({
+					formError: {
+						fullname: data.fullname,
+						address1: data.address1,
+						address2: data.address2,
+						city: data.city,
+						state: data.state,
+						zipcode: data.zipcode,
+					},
+				});				
+			})
+			.catch(function (error) {
+		    	console.log(error);
+		  });
+		//}
+	}
+
+	onLogout = (event) => {
+		this.props.logout();
+		this.props.history.push('/login');
 	}
 
 	render() {
-		const formAlert = this.state.formError;
+		let errors = [];
+
+		for (var key in this.state.formError){
+			if (this.state.formError[key] !== ''){
+				errors.push(this.state.formError[key]);
+			}
+		}
+
+		console.log('Errors: ' + errors);
 
 		return (
 			<div className="clientprofile">
@@ -149,11 +188,10 @@ class ClientProfile extends React.Component {
 					<Navbar bg="dark" variant="dark" expand="lg">
 					<Navbar.Brand>Website Name</Navbar.Brand>
 					<Nav className="mr-auto">
-						<Nav.Link>Client Profile</Nav.Link>
 						<Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
 						<Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
 					</Nav>
-					<Nav.Link>
+					<Nav.Link onClick = {this.onLogout}>
 						Logout
 					</Nav.Link>
 					</Navbar>
@@ -162,18 +200,18 @@ class ClientProfile extends React.Component {
 				<div className = "outerfocus">
 				<div className = "focus">
 					<div id = "title">
-						<h1>{this.state.username}'s Profile</h1>
+						<h1>Client Profile</h1>
 					</div>
 					<div>
 						<Form>
 							<Form.Group controlId="clientProfile">
 								<Form.Label>Name:</Form.Label>
-								<Form.Control name="name" value={this.state.name} type="text" onChange={this.onChange}/>
+								<Form.Control name="fullname" value={this.state.fullname} type="text" onChange={this.onChange}/>
 
-								<Form.Label>Address1:</Form.Label>
+								<Form.Label>Address 1:</Form.Label>
 								<Form.Control name="address1" value={this.state.address1} type="text" onChange={this.onChange}/>
 
-								<Form.Label>Address2:</Form.Label>
+								<Form.Label>Address 2:</Form.Label>
 								<Form.Control name="address2" value={this.state.address2} type="text" onChange={this.onChange}/>
 
 								<Form.Label>City:</Form.Label>
@@ -193,7 +231,6 @@ class ClientProfile extends React.Component {
 									<option value="FL">FL</option>
 									<option value="GA">GA</option>
 									<option value="HI">HI</option>
-									<option value="AL">AL</option>
 									<option value="ID">ID</option>
 									<option value="IA">IA</option>
 									<option value="IL">IL</option>
@@ -215,6 +252,7 @@ class ClientProfile extends React.Component {
 									<option value="NJ">NJ</option>
 									<option value="NM">NM</option>
 									<option value="NV">NV</option>
+									<option value="NY">NV</option>
 									<option value="OH">OH</option>
 									<option value="OK">OK</option>
 									<option value="OR">OR</option>
@@ -240,8 +278,13 @@ class ClientProfile extends React.Component {
 					</div>
 					<div>
 						<button type="button" className="btn btn-primary" onClick={this.onUpdateProfile}>Update Profile</button>
-						{formAlert !== '' &&
-							<Alert variant='danger'>{formAlert}</Alert>
+						{errors === undefined || errors.length > 0 ?
+								<Alert variant='danger'>
+									<Alert.Heading>Error: Unable to Update Profile</Alert.Heading>
+									{errors.map((d, idx) => <p>{d}</p>)}
+								</Alert>
+							:
+							null
 						}
 					</div>
 				</div>
@@ -253,8 +296,14 @@ class ClientProfile extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		token: state.token
+		token: state.token,
 	};
 };
 
-export default connect(mapStateToProps)(ClientProfile);
+const mapDispatchToProps = dispatch => {
+	return {
+		logout: () => dispatch(actions.logout()),
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClientProfile);
