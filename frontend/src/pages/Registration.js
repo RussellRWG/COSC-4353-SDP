@@ -99,28 +99,30 @@ class Registration extends React.Component {
 					</Navbar>
 
 				</div>
-				<div className='focus'>
-					<h1>Registration</h1>
-					<Form>
-						<Form.Group controlId="registration">
-							<Form.Label>Username</Form.Label>
-							<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
+				<div className='outerfocus'>
+					<div className='focus'>
+						<h1>Registration</h1>
+						<Form>
+							<Form.Group controlId="registration">
+								<Form.Label>Username</Form.Label>
+								<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
 
-							<Form.Label>Password</Form.Label>
-							<Form.Control name="password1" value={this.state.password1} onChange={this.onChange} type="password"/>
+								<Form.Label>Password</Form.Label>
+								<Form.Control name="password1" value={this.state.password1} onChange={this.onChange} type="password"/>
 
-							<Form.Label>Repeat Password</Form.Label>
-							<Form.Control name="password2" value={this.state.password2} onChange={this.onChange} type="password"/>
-						</Form.Group>
-					</Form>
-					<button type="button" class="btn btn-primary" onClick={this.onSubmit}>Submit</button>
-					<div>
-						{usernameAlert !== '' &&
-							<Alert variant='danger'>{usernameAlert}</Alert>
-						}
-						{passwordAlert !== '' &&
-							<Alert variant='danger'>{passwordAlert}</Alert>
-						}
+								<Form.Label>Repeat Password</Form.Label>
+								<Form.Control name="password2" value={this.state.password2} onChange={this.onChange} type="password"/>
+							</Form.Group>
+						</Form>
+						<button type="button" class="btn btn-primary" onClick={this.onSubmit}>Submit</button>
+						<div>
+							{usernameAlert !== '' &&
+								<Alert variant='danger'>{usernameAlert}</Alert>
+							}
+							{passwordAlert !== '' &&
+								<Alert variant='danger'>{passwordAlert}</Alert>
+							}
+						</div>
 					</div>
 				</div>
 			</div>

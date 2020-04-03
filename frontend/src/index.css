@@ -51,3 +51,7 @@ code {
   color: #cccccc;
   text-align: center;
 }
+
+.alert {
+  padding: 1em;
+}

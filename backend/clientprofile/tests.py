@@ -1,15 +1,15 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from django.contrib.auth.models import User
+from rest_framework.test import APITestCase
 from .models import ClientProfile
 
-# Create your tests here.
-
 # python manage.py test clientprofile
-class BasicTest(TestCase):
-    def setup(self):
-        user = User.objects.create_user(username='bobby', password='1X<ISRUkw+tuK')
+class BasicTest(APITestCase):
+    def test_setup(self):
+        user = User.objects.create_user(username="bobby", password="1X<ISRUkw+tuK")
+        user.save()
         
         profile = ClientProfile.objects.create(user=user)
         profile.username = "Bobby"
@@ -27,6 +27,7 @@ class BasicTest(TestCase):
 
     def test_validate_profile(self):
         user = User.objects.create_user(username='bobby', password='1X<ISRUkw+tuK')
+        user.save()
         
         profile = ClientProfile.objects.create(user=user)
         profile.username = "Bobby"
@@ -131,8 +132,8 @@ class BasicTest(TestCase):
         profile.save()
         profile.validate_profile()
         self.assertEqual(profile.validated, False)
-        
 
-        
-
+    def test_login(self):
+        user = User.objects.create_user(username="bobby", password="PAZZWERD")
+        self.assertTrue(self.client.login(username="bobby", password="PAZZWERD"))
         
