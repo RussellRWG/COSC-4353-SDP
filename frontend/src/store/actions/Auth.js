@@ -76,6 +76,7 @@ export const authRegistration = (username, password1, password2) => {
 		})
 		.catch(err => {
 			dispatch(authFail(err))
+			window.alert('Error creating account: most likely your username is already in use, or your password is not complex enough.')
 		})
 	}
 }
