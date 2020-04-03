@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from fuelform import views as fviews
 from clientprofile import views
 
 router = routers.DefaultRouter()
 router.register(r'clientprofile', views.ClientProfileView, 'clientprofile')
+router.register(r'fuelform', fviews.FuelFormView, 'fuelform')
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
@@ -27,3 +29,4 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('admin/', admin.site.urls), path('api/', include(router.urls)),
 ]
+urlpatterns += router.urls
