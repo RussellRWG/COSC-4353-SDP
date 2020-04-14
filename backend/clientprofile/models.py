@@ -57,7 +57,7 @@ class ClientProfile(models.Model):
             errors['city'] = 'City is required'
             self.validated = False
 
-        states = ['AL', 'AK','AR','AZ','CA','CO','CT','DE','FL','GA','HI','AL','ID','IA','IL','IN','KS','KY','LA','MA','MD','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV', 'NY', 'OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY']
+        states = ['AL', 'AK','AR','AZ','CA','CO','CT','DE','FL','GA','HI','ID','IA','IL','IN','KS','KY','LA','MA','MD', 'ME', 'MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV', 'NY', 'OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY']
         if self.state not in states:
             if self.state == '':
                 errors['state'] = 'State is required'

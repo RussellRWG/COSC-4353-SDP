@@ -48,7 +48,13 @@ class ClientProfile extends React.Component {
 		});
 	}
 
-	componentDidMount = () => {
+	componentDidMount = async () => {
+		/*if (!this.props.token){
+			this.props.history.push('/login');
+		}*/
+
+		await mapStateToProps(this.state);
+
 		if (!this.props.token){
 			this.props.history.push('/login');
 		}
@@ -74,7 +80,7 @@ class ClientProfile extends React.Component {
 					state: list.state,
 					zipcode: list.zipcode
 				});
-			})
+			});
 	}
 
 	onChange = (event) => {
@@ -147,8 +153,8 @@ class ClientProfile extends React.Component {
 				city: this.city,
 				state: this.state,
 				zipcode: this.zipcode
-			})).
-			then (res => {
+			}))
+			.then (res => {
 				console.log('Response:', res);
 				this.setState({formSubmit: 'True'});
 				const data = res.data;
@@ -244,6 +250,7 @@ class ClientProfile extends React.Component {
 									<option value="LA">LA</option>
 									<option value="MA">MA</option>
 									<option value="MD">MD</option>
+									<option value="ME">MD</option>
 									<option value="MI">MI</option>
 									<option value="MN">MN</option>
 									<option value="MO">MO</option>
@@ -290,7 +297,7 @@ class ClientProfile extends React.Component {
 							:
 							null
 						}
-						{errors.length == 0 && submitAlert != 'False' &&
+						{errors.length === 0 && submitAlert !== 'False' &&
 						<Alert variant='primary'>{''}
 						<Alert.Heading>Profile has been updated</Alert.Heading>
 						</Alert>

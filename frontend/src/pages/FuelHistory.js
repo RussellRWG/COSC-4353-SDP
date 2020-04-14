@@ -1,5 +1,11 @@
 import React from "react";
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 import {Table, Container} from "react-bootstrap";
+
+import axios from 'axios';
+import {connect} from 'react-redux';
+import * as actions from '../store/actions/Auth';
 
 class FuelHistory extends React.Component{
     constructor(props) {
@@ -20,8 +26,41 @@ class FuelHistory extends React.Component{
         }
     }
 
+    componentDidMount = async () => {
+        await mapStateToProps(this.state);
+        if (!this.props.token){
+            this.props.history.push('/login');
+        }
+
+        axios.defaults.headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Token ${this.props.token}`
+        };
+    }
+
+    onLogout = (event) => {
+        this.props.logout();
+        this.props.history.push('/login');
+    }
+
     render() {
         return (
+            <div className="fuelhistory">
+            <div id = "navigation">
+                    <Navbar bg="dark" variant="dark" expand="lg">
+                    <Navbar.Brand>Website Name</Navbar.Brand>
+                    <Nav className="mr-auto">
+                        <Nav.Link href="/profile">Client Profile</Nav.Link>
+                        <Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
+                    </Nav>
+                    <Nav.Link onClick = {this.onLogout}>
+                        Logout
+                    </Nav.Link>
+                    </Navbar>
+
+            </div>
+            <div className = "outerfocus">
+            <div className = "focus">
             <Container>
                 <h1>Fuel Quote History</h1>
                 <Table striped bordered hover size={"xs"}>
@@ -40,9 +79,25 @@ class FuelHistory extends React.Component{
                         })}
                     </tbody>
                 </Table>
+
             </Container>
+            </div>
+            </div>
+            </div>
         );
     }
 }
 
-export default FuelHistory;
+const mapStateToProps = state => {
+    return {
+        token: state.token,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(actions.logout()),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FuelHistory);

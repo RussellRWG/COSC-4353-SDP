@@ -1,10 +1,13 @@
 import React from "react";
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 import DatePicker from "react-datepicker/es";
 import "react-datepicker/dist/react-datepicker.min.css";
 import {Form, Container, Col, Row, Button} from "react-bootstrap";
 
 import axios from "axios";
-
+import {connect} from 'react-redux';
+import * as actions from '../store/actions/Auth';
 
 class FuelForm extends React.Component{
     constructor(props) {
@@ -15,6 +18,24 @@ class FuelForm extends React.Component{
             selectedDate: new Date(),
             address: "1725 Slough Avenue, Scranton, Pennsylvania"
         }
+    }
+
+    componentDidMount = async () => {
+        await mapStateToProps(this.state);
+
+        if (!this.props.token){
+            this.props.history.push('/login');
+        }
+
+        axios.defaults.headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Token ${this.props.token}`
+        };
+    }
+
+    onLogout = (event) => {
+        this.props.logout();
+        this.props.history.push('/login');
     }
 
 
@@ -44,6 +65,22 @@ class FuelForm extends React.Component{
 
     render() {
         return (
+            <div className="fuelform">
+            <div id = "navigation">
+                    <Navbar bg="dark" variant="dark" expand="lg">
+                    <Navbar.Brand>Website Name</Navbar.Brand>
+                    <Nav className="mr-auto">
+                        <Nav.Link href="/profile">Client Profile</Nav.Link>
+                        <Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
+                    </Nav>
+                    <Nav.Link onClick = {this.onLogout}>
+                        Logout
+                    </Nav.Link>
+                    </Navbar>
+
+            </div>
+            <div className = "outerfocus">
+            <div className = "focus">
             <Container>
                 <h1>Fuel Form</h1>
                 <Form>
@@ -103,9 +140,24 @@ class FuelForm extends React.Component{
                     <Button onClick={this.onSubmitHandler}>Submit</Button>
                 </Form>
             </Container>
+            </div>
+            </div>
+            </div>
         );
     }
 
 }
 
-export default FuelForm;
+const mapStateToProps = state => {
+    return {
+        token: state.token,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(actions.logout()),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FuelForm);
