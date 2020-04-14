@@ -31,7 +31,7 @@ class Registration extends React.Component {
 		);
 	}
 
-	onSubmit = (event) => {
+	onSubmit = async (event) => {
 		this.setState({
 			usernameValid: false,
 			passwordValid: false,
@@ -68,7 +68,7 @@ class Registration extends React.Component {
 		}
 
 		if (this.state.usernameFormError === '' && this.state.passwordFormError === '') {
-			this.props.onAuth(this.state.username, this.state.password1, this.state.password2, this.state.confirm);
+			await this.props.onAuth(this.state.username, this.state.password1, this.state.password2, this.state.confirm);
 		}
 	}
 
@@ -90,10 +90,11 @@ class Registration extends React.Component {
 				<div>
 					<Navbar bg="dark" variant="dark" expand="lg">
 						<Navbar.Brand>Website Name</Navbar.Brand>
-						<Nav className="mr-auto">
+							<Nav className="mr-auto">
 						</Nav>
-						<Nav.Link><Link to="/login">
-            <button type="button" class="btn btn-primary">Sign In</button>
+						<Nav.Link>
+							<Link to="/login">
+            					<button type="button" class="btn btn-primary">Sign In</button>
 							</Link>
 						</Nav.Link>
 					</Navbar>

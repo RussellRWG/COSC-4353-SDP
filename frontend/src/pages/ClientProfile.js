@@ -53,7 +53,8 @@ class ClientProfile extends React.Component {
 			this.props.history.push('/login');
 		}*/
 
-		await mapStateToProps(this.state);
+		//await mapStateToProps(this.state);
+        await this.props.isLoggedIn();
 
 		if (!this.props.token){
 			this.props.history.push('/login');
@@ -318,9 +319,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-	return {
-		logout: () => dispatch(actions.logout()),
-	}
+    return {
+        isLoggedIn: () => dispatch(actions.authCheckState()),
+        logout: () => dispatch(actions.logout()),
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClientProfile);

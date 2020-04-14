@@ -27,7 +27,9 @@ class FuelHistory extends React.Component{
     }
 
     componentDidMount = async () => {
-        await mapStateToProps(this.state);
+        //await mapStateToProps(this.state);
+        await this.props.isLoggedIn();
+
         if (!this.props.token){
             this.props.history.push('/login');
         }
@@ -96,6 +98,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        isLoggedIn: () => dispatch(actions.authCheckState()),
         logout: () => dispatch(actions.logout()),
     }
 }
