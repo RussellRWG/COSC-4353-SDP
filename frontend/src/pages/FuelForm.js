@@ -16,7 +16,9 @@ class FuelForm extends React.Component{
             gallons: 0,
             price: 1.99,
             selectedDate: new Date(),
-            address: "1725 Slough Avenue, Scranton, Pennsylvania"
+            address: "1725 Slough Avenue, Scranton, Pennsylvania",
+
+            validated: false
         }
     }
 
@@ -32,6 +34,23 @@ class FuelForm extends React.Component{
             'Content-Type': 'application/json',
             Authorization: `Token ${this.props.token}`
         };
+
+        await axios
+            .get(`http://localhost:8000/api/clientprofile`)
+            .then(res => {
+                const list = res.data[0];
+                console.log(list);
+                //console.log(list)
+                this.setState({
+                    //username : list.username,
+                    validated: list.validated,
+                });
+            });
+
+        if (this.state.validated === false){
+            this.props.history.push('/login');
+        }
+        console.log(this.state.validated);
     }
 
     onLogout = (event) => {
