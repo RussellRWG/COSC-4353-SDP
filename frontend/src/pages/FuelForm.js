@@ -44,6 +44,7 @@ class FuelForm extends React.Component{
                 this.setState({
                     //username : list.username,
                     validated: list.validated,
+                    address: list.address1 + ' ' + list.address2,
                 });
             });
 
