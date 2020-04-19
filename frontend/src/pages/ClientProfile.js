@@ -199,6 +199,7 @@ class ClientProfile extends React.Component {
 					<Navbar bg="dark" variant="dark" expand="lg">
 					<Navbar.Brand>Website Name</Navbar.Brand>
 					<Nav className="mr-auto">
+						<Nav.Link href="/profile">Client Profile</Nav.Link>
 						<Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
 						<Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
 					</Nav>

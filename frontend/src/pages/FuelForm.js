@@ -16,9 +16,10 @@ class FuelForm extends React.Component{
             gallons: 0,
             price: 1.99,
             selectedDate: new Date(),
-            address: "1725 Slough Avenue, Scranton, Pennsylvania",
+            address: "",
 
-            validated: false
+            validated: false,
+            user: ""
         }
     }
 
@@ -42,7 +43,8 @@ class FuelForm extends React.Component{
                 console.log(list);
                 //console.log(list)
                 this.setState({
-                    //username : list.username,
+                    user : list.user,
+                    address: list.address1,
                     validated: list.validated,
                 });
             });
@@ -74,13 +76,15 @@ class FuelForm extends React.Component{
         console.log("HERE!", this.state);
         if(gallons !== 0 && gallons!==""){
             const total = gallons * price;
-            axios.post("http://localhost:8000/api/fuelform/",{"gallons":parseInt(gallons), "delivery_address":address, "suggested_price":price, "total_due":total, "delivery_date":formatDate})
+            axios.post("http://localhost:8000/api/fuelform/",{"user" : this.state.user, "gallons":parseInt(gallons), "delivery_address":address, "suggested_price":price, "total_due":total, "delivery_date":formatDate})
                 .then((response) => {
-                    console.log(response.status)
+                    console.log("RESPONSE: " + response.status)
                 })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
         }
-
-
     };
 
     render() {
@@ -91,6 +95,7 @@ class FuelForm extends React.Component{
                     <Navbar.Brand>Website Name</Navbar.Brand>
                     <Nav className="mr-auto">
                         <Nav.Link href="/profile">Client Profile</Nav.Link>
+                        <Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
                         <Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
                     </Nav>
                     <Nav.Link onClick = {this.onLogout}>

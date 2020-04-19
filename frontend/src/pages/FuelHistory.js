@@ -12,7 +12,7 @@ class FuelHistory extends React.Component{
         super(props);
         this.state = {
             price: [
-                {"price":1.99, "date":"01/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":100, "total":199},
+                /*{"price":1.99, "date":"01/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":100, "total":199},
                 {"price":1.90, "date":"02/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":150, "total":285},
                 {"price":1.95, "date":"03/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":120, "total":234},
                 {"price":2.05, "date":"04/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":160, "total":328},
@@ -21,7 +21,7 @@ class FuelHistory extends React.Component{
                 {"price":1.93, "date":"07/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":210, "total":405.3},
                 {"price":2.10, "date":"08/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":220, "total":462},
                 {"price":2.15, "date":"09/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":130, "total":275.6},
-                {"price":2.00, "date":"10/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":190, "total":380}
+                {"price":2.00, "date":"10/01/2020", "address":"1725 Slough Avenue, Scranton, Pennsylvania", "gallon":190, "total":380}*/
                 ]
         }
     }
@@ -38,6 +38,19 @@ class FuelHistory extends React.Component{
             'Content-Type': 'application/json',
             Authorization: `Token ${this.props.token}`
         };
+
+        await axios
+            .get(`http://localhost:8000/api/fuelform`)
+            .then(res => {
+                const list = res.data;
+                console.log(list);
+                //console.log(list)
+                this.setState({
+                    price : list,
+                });
+            });
+
+
     }
 
     onLogout = (event) => {
@@ -54,6 +67,7 @@ class FuelHistory extends React.Component{
                     <Nav className="mr-auto">
                         <Nav.Link href="/profile">Client Profile</Nav.Link>
                         <Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
+                        <Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
                     </Nav>
                     <Nav.Link onClick = {this.onLogout}>
                         Logout
@@ -71,11 +85,12 @@ class FuelHistory extends React.Component{
                         {this.state.price.map((value,index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{value.date}</td>
-                                    <td>${value.price}</td>
-                                    <td>{value.address}</td>
-                                    <td>{value.gallon}</td>
-                                    <td>${value.total}</td>
+                                    {console.log("DD: " + value.delivery_date)}
+                                    <td>{value.delivery_date}</td>
+                                    <td>${value.suggested_price}</td>
+                                    <td>{value.delivery_address}</td>
+                                    <td>{value.gallons}</td>
+                                    <td>${value.total_due}</td>
                                 </tr>
                             )
                         })}

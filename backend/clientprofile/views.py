@@ -10,6 +10,7 @@ class ClientProfileView(viewsets.ModelViewSet):
     #queryset = ClientProfile.objects.filter(user = request.user)
     serializer_class = ClientProfileSerializer
     permission_classes = (permissions.IsAuthenticated,)
+    
     def get_queryset(self):
         profile = ClientProfile.objects.filter(user = self.request.user)
         if profile.exists():
