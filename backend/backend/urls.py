@@ -22,6 +22,7 @@ from clientprofile import views
 router = routers.DefaultRouter()
 router.register(r'clientprofile', views.ClientProfileView, 'clientprofile')
 router.register(r'fuelform', fviews.FuelFormView, 'fuelform')
+router.register(r"price",fviews.CalcPriceFuelForm,"price")
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
