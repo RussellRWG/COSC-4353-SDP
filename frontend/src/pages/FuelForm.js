@@ -14,12 +14,14 @@ class FuelForm extends React.Component{
         super(props);
         this.state = {
             gallons: 0,
-            price: 1.99,
+            price: 1.5,
             selectedDate: new Date(),
             address: "",
-
+            location:"",
+            prev: false,
             validated: false,
-            user: ""
+            user: "",
+            total: "",
         }
     }
 
@@ -44,7 +46,7 @@ class FuelForm extends React.Component{
                 //console.log(list)
                 this.setState({
                     user : list.user,
-                    address: list.address1,
+                    location: list.state,
                     validated: list.validated,
                     address: list.address1 + ' ' + list.address2,
                 });
@@ -87,6 +89,28 @@ class FuelForm extends React.Component{
                 });
         }
     };
+
+    onGetFormData = () => {
+        axios.get("http://localhost:8000/api/fuelform/")
+            .then((response) => {
+                console.log("Previous:",response.data)
+                if(response.data.length!==0){
+                    console.log("True!")
+                    this.setState({prev:true})
+                }
+            })
+        this.onCalculatePrice()
+    }
+
+    onPOSTCalculatePrice = () => {
+        const currentMonth = this.state.selectedDate.getMonth()
+        const gallons = this.state.gallons;
+        axios.post("http://localhost:8000/api/price/", {"month":currentMonth, "gallons":gallons})
+            .then((response) => {
+                console.log("Return Price:",response.data)
+                this.setState({total: response.data.total_price, price:response.data.price})
+            })
+    }
 
     render() {
         return (
@@ -148,7 +172,7 @@ class FuelForm extends React.Component{
                             </Form.Group>
                         </Col>
                         <Col>
-
+                            <Button onClick={this.onPOSTCalculatePrice}>Get Price</Button>
                         </Col>
                     </Row>
 
@@ -156,7 +180,7 @@ class FuelForm extends React.Component{
                         <Col xs>
                             <Form.Group>
                                 <Form.Label>Total Amount Due</Form.Label>
-                                <Form.Control type={"number"} disabled value={this.state.gallons * this.state.price}/>
+                                <Form.Control type={"number"} disabled value={this.state.total}/>
                             </Form.Group>
                         </Col>
                         <Col>
