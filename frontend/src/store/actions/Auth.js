@@ -53,7 +53,9 @@ export const authLogin = (username, password) => {
 			dispatch(checkAuthTimeout(3600));
 		})
 		.catch(err => {
-			dispatch(authFail(err))
+			dispatch(authFail(err));
+			console.log(err.response);
+			window.alert(err.response.data.non_field_errors[0]);
 		})
 	}
 }
@@ -75,7 +77,7 @@ export const authRegistration = (username, password1, password2) => {
 			dispatch(checkAuthTimeout(3600));
 		})
 		.catch(err => {
-			dispatch(authFail(err))
+			dispatch(authFail(err));
 			window.alert('Error creating account: most likely your username is already in use, or your password is not complex enough.')
 		})
 	}

@@ -22,8 +22,8 @@ const authSuccess = (state, action) => {
 	});
 }
 
-const authFail = (state, action) => {
-	return updateObject(state, {
+const authFail = async (state, action) => {
+	return await updateObject(state, {
 		error: action.error,
 		loading: false
 	});

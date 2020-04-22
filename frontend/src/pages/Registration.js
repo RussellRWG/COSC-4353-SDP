@@ -16,8 +16,6 @@ class Registration extends React.Component {
 			username: '',
 			password1: '',
 			password2: '',
-			usernameValid: false,
-			passwordValid: false,
 			usernameFormError: '',
 			passwordFormError: ''
 		}
@@ -32,22 +30,14 @@ class Registration extends React.Component {
 	}
 
 	onSubmit = async (event) => {
-		this.setState({
-			usernameValid: false,
-			passwordValid: false,
+		await this.setState({
 			usernameFormError: '',
 			passwordFormError: '',
-			confirm: false
 		});
 
-		if (this.state.username.length < 3){
+		if (this.state.username.length < 1){
 			this.setState({
-				usernameFormError: 'Username must be at least 3 characters long'
-			});
-		}
-		else {
-			this.setState({
-				usernameValid: true
+				usernameFormError: 'Username must be at least 1 characters long'
 			});
 		}
 
@@ -59,11 +49,6 @@ class Registration extends React.Component {
 		else if (this.state.password1 !== this.state.password2){
 			this.setState({
 				passwordFormError: 'Passwords do not match'
-			});
-		}
-		else {
-			this.setState({
-				passwordValid: true
 			});
 		}
 
@@ -117,11 +102,14 @@ class Registration extends React.Component {
 						</Form>
 						<button type="button" class="btn btn-primary" onClick={this.onSubmit}>Submit</button>
 						<div>
-							{usernameAlert !== '' &&
-								<Alert variant='danger'>{usernameAlert}</Alert>
-							}
-							{passwordAlert !== '' &&
-								<Alert variant='danger'>{passwordAlert}</Alert>
+							{(usernameAlert !== '' || passwordAlert !== '')&&
+								<div>
+									<br/>
+									<Alert variant='danger'>
+									<p>{usernameAlert}</p>
+									<p>{passwordAlert}</p>
+									</Alert>
+								</div>
 							}
 						</div>
 					</div>

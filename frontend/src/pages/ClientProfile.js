@@ -292,17 +292,23 @@ class ClientProfile extends React.Component {
 					<div>
 						<button type="button" className="btn btn-primary" onClick={this.onUpdateProfile}>Update Profile</button>
 						{errors === undefined || errors.length > 0 ?
+								<div>
+								<br/>
 								<Alert variant='danger'>
 									<Alert.Heading>Error: Unable to Update Profile</Alert.Heading>
 									{errors.map((d, idx) => <p>{d}</p>)}
 								</Alert>
+								</div>
 							:
 							null
 						}
 						{errors.length === 0 && submitAlert !== 'False' &&
-						<Alert variant='primary'>{''}
-						<Alert.Heading>Profile has been updated</Alert.Heading>
-						</Alert>
+						<div>
+							<br/>
+							<Alert variant='success'>{''}
+							<Alert.Heading>Profile has been updated</Alert.Heading>
+							</Alert>
+						</div>
 					}
 
 					</div>

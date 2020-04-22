@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Alert from 'react-bootstrap/Alert';
 import DatePicker from "react-datepicker/es";
 import "react-datepicker/dist/react-datepicker.min.css";
 import {Form, Container, Col, Row, Button} from "react-bootstrap";
@@ -23,7 +24,8 @@ class FuelForm extends React.Component{
             user: "",
             total: "",
             disableGetPrice: true,
-            disableSubmit: true
+            disableSubmit: true,
+            justSubmitted: false
         }
     }
 
@@ -68,13 +70,37 @@ class FuelForm extends React.Component{
 
     onChangeGallonsHandler = async (e) =>{
         const value = e.target.value;
-        
-        if (isNaN(Number.parseInt(value)) === true){return;}
+        this.setState({justSubmitted: false,});
 
-        await this.setState({gallons: value})
+        //Make sure the value is a valid float number before changing the textbox
+        if ((isNaN(parseFloat(value)) || !isFinite(value)) && value !== ''){return;}
+
+        await this.setState({gallons: value});
+        
+        //Disable or enable the textbox based on input if it's valid
         if (Number.parseFloat(this.state.gallons) > 0 && this.state.address !== ""){
             this.setState({
                 disableGetPrice: false
+            });
+        }
+        else {
+            this.setState({
+                disableGetPrice: true,
+                disableSubmit: true,
+                price: "",
+                total: "",
+            });
+        }
+    };
+
+    changeDate = (date) => {
+        this.setState({selectedDate: date});
+        this.setState({justSubmitted: false,});
+        if (Number.parseFloat(this.state.gallons) > 0 && this.state.address !== ""){
+            this.setState({
+                disableSubmit: true,
+                price: "",
+                total: ""
             });
         }
         else {
@@ -87,10 +113,6 @@ class FuelForm extends React.Component{
         }
     };
 
-    changeDate = (date) => {
-        this.setState({selectedDate: date})
-    };
-
     onSubmitHandler = (e) => {
         e.preventDefault();
         const {gallons, price, selectedDate, address} = this.state;
@@ -101,6 +123,7 @@ class FuelForm extends React.Component{
             axios.post("http://localhost:8000/api/fuelform/",{"user" : this.state.user, "gallons":parseInt(gallons), "delivery_address":address, "suggested_price":price, "total_due":total, "delivery_date":formatDate})
                 .then((response) => {
                     console.log("RESPONSE: " + response.status)
+                    this.setState({justSubmitted: true,});
                 })
                 .catch(function (error) {
                     // handle error
@@ -124,6 +147,7 @@ class FuelForm extends React.Component{
     onPOSTCalculatePrice = () => {
         const currentMonth = this.state.selectedDate.getMonth()
         const gallons = this.state.gallons;
+        this.setState({justSubmitted: false,});
         axios.post("http://localhost:8000/api/price/", {"month":currentMonth, "gallons":gallons})
             .then((response) => {
                 console.log("Return Price:",response.data)
@@ -202,7 +226,7 @@ class FuelForm extends React.Component{
                         <Col xs>
                             <Form.Group>
                                 <Form.Label>Gallons Requested</Form.Label>
-                                <Form.Control required type={"number"} min={0} onChange={this.onChangeGallonsHandler} value={this.state.gallons} />
+                                <Form.Control required type={"text"} min={0} onChange={this.onChangeGallonsHandler} value={this.state.gallons} />
                             </Form.Group>
                         </Col>
 
@@ -232,7 +256,7 @@ class FuelForm extends React.Component{
                         <Col xs>
                             <Form.Group>
                                 <Form.Label>Suggested Price</Form.Label>
-                                <Form.Control type={"number"} disabled value={this.state.price}/>
+                                <Form.Control type={"text"} disabled value={this.state.price}/>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -244,7 +268,7 @@ class FuelForm extends React.Component{
                         <Col xs>
                             <Form.Group>
                                 <Form.Label>Total Amount Due</Form.Label>
-                                <Form.Control type={"number"} disabled value={this.state.total}/>
+                                <Form.Control type={"text"} disabled value={this.state.total}/>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -253,6 +277,14 @@ class FuelForm extends React.Component{
                     </Row>
                     <Button disabled={this.state.disableSubmit} onClick={this.onSubmitHandler}>Submit</Button>
                 </Form>
+                {this.state.justSubmitted &&
+                    <div>
+                        <br/>
+                        <Alert variant='success'>{''}
+                        <Alert.Heading>Qoute Succesfully Made!</Alert.Heading>
+                        </Alert>
+                    </div>
+                }
             </Container>
             </div>
             </div>

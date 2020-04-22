@@ -50,10 +50,6 @@ class Login extends React.Component {
 		}
 	}
 
-	validateFields() {
-
-	}
-
     render(){
     	let formAlert = this.state.formError;
     	if (this.props.error){
