@@ -14,7 +14,7 @@ class FuelForm extends React.Component{
         super(props);
         this.state = {
             gallons: 0,
-            price: 1.5,
+            price: "",
             selectedDate: new Date(),
             address: "",
             location:"",
@@ -22,6 +22,8 @@ class FuelForm extends React.Component{
             validated: false,
             user: "",
             total: "",
+            disableGetPrice: true,
+            disableSubmit: true
         }
     }
 
@@ -48,7 +50,7 @@ class FuelForm extends React.Component{
                     user : list.user,
                     location: list.state,
                     validated: list.validated,
-                    address: list.address1 + ' ' + list.address2,
+                    address: list.address1 + ' ' + list.address2 + ', ' + list.city + ' ' + list.state + ', ' + list.zipcode,
                 });
             });
 
@@ -64,8 +66,25 @@ class FuelForm extends React.Component{
     }
 
 
-    onChangeGallonsHandler = (e) =>{
-        this.setState({gallons: e.target.value})
+    onChangeGallonsHandler = async (e) =>{
+        const value = e.target.value;
+        
+        if (isNaN(Number.parseInt(value)) === true){return;}
+
+        await this.setState({gallons: value})
+        if (Number.parseFloat(this.state.gallons) > 0 && this.state.address !== ""){
+            this.setState({
+                disableGetPrice: false
+            });
+        }
+        else {
+            this.setState({
+                disableGetPrice: true,
+                disableSubmit: true,
+                price: "",
+                total: ""
+            });
+        }
     };
 
     changeDate = (date) => {
@@ -76,7 +95,7 @@ class FuelForm extends React.Component{
         e.preventDefault();
         const {gallons, price, selectedDate, address} = this.state;
         const formatDate = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate();
-        console.log("HERE!", this.state);
+        //console.log("HERE!", this.state);
         if(gallons !== 0 && gallons!==""){
             const total = gallons * price;
             axios.post("http://localhost:8000/api/fuelform/",{"user" : this.state.user, "gallons":parseInt(gallons), "delivery_address":address, "suggested_price":price, "total_due":total, "delivery_date":formatDate})
@@ -110,8 +129,53 @@ class FuelForm extends React.Component{
                 console.log("Return Price:",response.data)
                 this.setState({total: response.data.total_price, price:response.data.price})
             })
-    }
 
+        this.setState({
+                disableSubmit: false
+            });
+    }
+    //
+    // onCalculatePrice = () => {
+    //     const location = this.state.location;
+    //     const prev = this.state.prev;
+    //     const gallons = this.state.gallons;
+    //     const May = 4;
+    //     const September = 8
+    //     const currentMonth = this.state.selectedDate.getMonth()
+    //     console.log("Date:",this.state.selectedDate.getMonth())
+    //     // Company Profit Factor
+    //     let profit_factor = 0.1
+    //     let location_factor = 0.04;
+    //     let prev_factor = 0.0
+    //     let gallons_factor = 0.03
+    //     let month_factor = 0.03
+    //
+    //     if (location==="TX"){
+    //         location_factor = 0.02
+    //     } else {
+    //         location_factor = 0.04
+    //     }
+    //     if (prev===true){
+    //         prev_factor = -0.01
+    //     }
+    //     if (gallons>1000){
+    //         gallons_factor =0.02
+    //     } else {
+    //         gallons_factor =0.03
+    //     }
+    //     if(currentMonth>May && currentMonth < September){
+    //         month_factor = 0.04
+    //     } else {
+    //         month_factor= 0.03
+    //     }
+    //
+    //
+    //
+    //     const totalFactors = 1.50+(profit_factor+location_factor + prev_factor+gallons_factor+month_factor)*1.50;
+    //     console.log("Total factor:",totalFactors)
+    //     this.setState({price: totalFactors})
+    //
+    // }
     render() {
         return (
             <div className="fuelform">
@@ -172,7 +236,7 @@ class FuelForm extends React.Component{
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Button onClick={this.onPOSTCalculatePrice}>Get Price</Button>
+                            <Button disabled={this.state.disableGetPrice} onClick={this.onPOSTCalculatePrice}>Get Price</Button>
                         </Col>
                     </Row>
 
@@ -187,7 +251,7 @@ class FuelForm extends React.Component{
 
                         </Col>
                     </Row>
-                    <Button onClick={this.onSubmitHandler}>Submit</Button>
+                    <Button disabled={this.state.disableSubmit} onClick={this.onSubmitHandler}>Submit</Button>
                 </Form>
             </Container>
             </div>
