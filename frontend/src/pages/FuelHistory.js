@@ -49,8 +49,6 @@ class FuelHistory extends React.Component{
                     price : list,
                 });
             });
-
-
     }
 
     onLogout = (event) => {
@@ -80,17 +78,17 @@ class FuelHistory extends React.Component{
             <Container>
                 <h1>Fuel Quote History</h1>
                 <Table striped bordered hover size={"xs"}>
-                    <th>Date</th><th>Price</th><th>Address</th><th>Gallon</th><th>Total</th>
+                    <th>Date</th><th>Price</th><th>Address</th><th>Gallons</th><th>Total</th>
                     <tbody>
                         {this.state.price.map((value,index) => {
                             return (
                                 <tr key={index}>
                                     {console.log("DD: " + value.delivery_date)}
                                     <td>{value.delivery_date}</td>
-                                    <td>${value.suggested_price}</td>
+                                    <td>${parseFloat(value.suggested_price).toFixed(2)}</td>
                                     <td>{value.delivery_address}</td>
-                                    <td>{value.gallons}</td>
-                                    <td>${value.total_due}</td>
+                                    <td>{parseFloat(value.gallons).toFixed(2)}</td>
+                                    <td>${parseFloat(value.total_due).toFixed(2)}</td>
                                 </tr>
                             )
                         })}

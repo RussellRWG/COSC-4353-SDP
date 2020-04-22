@@ -58,6 +58,13 @@ class Login extends React.Component {
     	let formAlert = this.state.formError;
     	if (this.props.error){
     		formAlert = this.props.error.message;
+
+    		if (formAlert === "Request failed with status code 400"){
+    			formAlert = "Incorrect username or password";
+    		}
+    		else if (formAlert === "Request failed with status code 401"){
+    			formAlert = "Stale request, try refreshing the page";
+    		}
     	}
 
 		if (this.props.token){
