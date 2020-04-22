@@ -6,6 +6,6 @@ class FuelFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fuel
 
-        fields = ("gallons", "delivery_address", "delivery_date", "suggested_price", "total_due")
+        fields = ("user", "gallons", "delivery_address", "delivery_date", "suggested_price", "total_due")
 
 

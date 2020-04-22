@@ -14,11 +14,14 @@ class FuelForm extends React.Component{
         super(props);
         this.state = {
             gallons: 0,
-            price: 1.99,
+            price: 1.5,
             selectedDate: new Date(),
-            address: "1725 Slough Avenue, Scranton, Pennsylvania",
-
-            validated: false
+            address: "",
+            location:"",
+            prev: false,
+            validated: false,
+            user: "",
+            total: "",
         }
     }
 
@@ -42,7 +45,8 @@ class FuelForm extends React.Component{
                 console.log(list);
                 //console.log(list)
                 this.setState({
-                    //username : list.username,
+                    user : list.user,
+                    location: list.state,
                     validated: list.validated,
                     address: list.address1 + ' ' + list.address2,
                 });
@@ -75,14 +79,38 @@ class FuelForm extends React.Component{
         console.log("HERE!", this.state);
         if(gallons !== 0 && gallons!==""){
             const total = gallons * price;
-            axios.post("http://localhost:8000/api/fuelform/",{"gallons":parseInt(gallons), "delivery_address":address, "suggested_price":price, "total_due":total, "delivery_date":formatDate})
+            axios.post("http://localhost:8000/api/fuelform/",{"user" : this.state.user, "gallons":parseInt(gallons), "delivery_address":address, "suggested_price":price, "total_due":total, "delivery_date":formatDate})
                 .then((response) => {
-                    console.log(response.status)
+                    console.log("RESPONSE: " + response.status)
                 })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
         }
-
-
     };
+
+    onGetFormData = () => {
+        axios.get("http://localhost:8000/api/fuelform/")
+            .then((response) => {
+                console.log("Previous:",response.data)
+                if(response.data.length!==0){
+                    console.log("True!")
+                    this.setState({prev:true})
+                }
+            })
+        this.onCalculatePrice()
+    }
+
+    onPOSTCalculatePrice = () => {
+        const currentMonth = this.state.selectedDate.getMonth()
+        const gallons = this.state.gallons;
+        axios.post("http://localhost:8000/api/price/", {"month":currentMonth, "gallons":gallons})
+            .then((response) => {
+                console.log("Return Price:",response.data)
+                this.setState({total: response.data.total_price, price:response.data.price})
+            })
+    }
 
     render() {
         return (
@@ -92,6 +120,7 @@ class FuelForm extends React.Component{
                     <Navbar.Brand>Website Name</Navbar.Brand>
                     <Nav className="mr-auto">
                         <Nav.Link href="/profile">Client Profile</Nav.Link>
+                        <Nav.Link href="/fuelform">Fuel Quote Form</Nav.Link>
                         <Nav.Link href="/fuelhistory">Fuel Quote History</Nav.Link>
                     </Nav>
                     <Nav.Link onClick = {this.onLogout}>
@@ -143,7 +172,7 @@ class FuelForm extends React.Component{
                             </Form.Group>
                         </Col>
                         <Col>
-
+                            <Button onClick={this.onPOSTCalculatePrice}>Get Price</Button>
                         </Col>
                     </Row>
 
@@ -151,7 +180,7 @@ class FuelForm extends React.Component{
                         <Col xs>
                             <Form.Group>
                                 <Form.Label>Total Amount Due</Form.Label>
-                                <Form.Control type={"number"} disabled value={this.state.gallons * this.state.price}/>
+                                <Form.Control type={"number"} disabled value={this.state.total}/>
                             </Form.Group>
                         </Col>
                         <Col>
