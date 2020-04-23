@@ -260,7 +260,7 @@ class FuelForm extends React.Component{
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Button disabled={this.state.disableGetPrice} onClick={this.onPOSTCalculatePrice}>Get Price</Button>
+                            <Button disabled={this.state.disableGetPrice} onClick={parseFloat(this.onPOSTCalculatePrice).toFixed(2)}>Get Price</Button>
                         </Col>
                     </Row>
 
@@ -268,7 +268,7 @@ class FuelForm extends React.Component{
                         <Col xs>
                             <Form.Group>
                                 <Form.Label>Total Amount Due</Form.Label>
-                                <Form.Control type={"text"} disabled value={this.state.total}/>
+                                <Form.Control type={"text"} disabled value={parseFloat(this.state.total).toFixed(2)}/>
                             </Form.Group>
                         </Col>
                         <Col>

@@ -16,6 +16,8 @@ from rest_framework.test import force_authenticate
 #client = APIClient()
 #client.post(path="/",data={"gallons":12.4, "delivery_address":"4418","delivery_date":"2020-01-01","suggested_price":1.99, "total_due":24.676}, format="json")
 
+# python manage.py test fuelform
+
 class FuelFormTest(APITestCase):
 
     def test_create_fuel_data(self):

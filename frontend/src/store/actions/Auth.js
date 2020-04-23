@@ -54,8 +54,8 @@ export const authLogin = (username, password) => {
 		})
 		.catch(err => {
 			dispatch(authFail(err));
-			console.log(err.response);
-			window.alert(err.response.data.non_field_errors[0]);
+			//console.log(err.response);
+			window.alert("Invalid Credinitals");
 		})
 	}
 }

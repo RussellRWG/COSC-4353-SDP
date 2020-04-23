@@ -84,7 +84,7 @@ class Login extends React.Component {
 
                 <div className='outerfocus'>
 	                <div className='focus'>
-						<h1>Sign In</h1>
+						<h1>Login</h1>
 						{this.props.loading ?
 							<Spinner animation="border" role="status"><span className="sr-only">Loading...</span></Spinner>
 							:
@@ -98,9 +98,8 @@ class Login extends React.Component {
 									</Form.Group>
 								</Form>
 								<div>
-								    <button type="button" className="btn btn-primary" onClick={this.onSubmit}>Submit</button>
-								    <p>or <Link to="/Registration">Register</Link></p>
-							      	
+								    <button type="button" class="btn btn-primary" onClick={this.onSubmit}><strong>Login</strong></button>
+								    <p class="d-inline-block">&ensp;or <strong><Link to="/Registration">Register</Link></strong></p>
 							    </div>
 						      	{formAlert !== '' &&
 									<Alert variant='danger'>{formAlert}</Alert>

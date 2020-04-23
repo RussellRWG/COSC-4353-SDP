@@ -93,7 +93,7 @@ class Registration extends React.Component {
 								<Form.Label>Username</Form.Label>
 								<Form.Control name="username" value={this.state.username} onChange={this.onChange} type="text"/>
 
-								<Form.Label>Password</Form.Label>
+								<Form.Label>Password (Must be at least 8 characters long and contain at least one number and letter)</Form.Label>
 								<Form.Control name="password1" value={this.state.password1} onChange={this.onChange} type="password"/>
 
 								<Form.Label>Repeat Password</Form.Label>

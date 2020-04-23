@@ -11,7 +11,7 @@ from clientprofile.models import ClientProfile
 
 class FuelFormView(viewsets.ModelViewSet):
     serializer_class = FuelFormSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         profile = Fuel.objects.filter(user = self.request.user)
