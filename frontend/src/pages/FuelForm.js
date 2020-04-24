@@ -234,7 +234,7 @@ class FuelForm extends React.Component{
                             <Form.Group>
                                 <Form.Label>Delivery Date</Form.Label>
                                 <Row>
-                                    <DatePicker selected={this.state.selectedDate} onChange={this.changeDate} className={"form-control"}/>
+                                    <DatePicker minDate={new Date()} selected={this.state.selectedDate} onChange={this.changeDate} className={"form-control"}/>
                                 </Row>
                             </Form.Group>
                         </Col>
